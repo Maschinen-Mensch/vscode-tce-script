@@ -1,0 +1,110 @@
+{
+	"$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+	"name": "TCE Script",
+	"patterns": [
+		{
+			"include": "#keywords"
+		},
+		{
+			"include": "#subKeywords"
+		},
+		{
+			"include": "#constant"
+		},
+		{
+			"include": "#strings"
+		},
+		{
+			"include": "#locaStrings"
+		},
+		{
+			"include": "#entity"
+		},
+		{
+			"include": "#posFlag"
+		},
+		{
+			"include": "#negFlag"
+		},
+		{
+			"include": "#range"
+		},
+		{
+			"include": "#number"
+		}
+	],
+	"repository": {
+		"keywords": {
+			"patterns": [{
+				"match": "[\\s,:{](id|targetId|if|while|for|return|select|partyEvents|charEvents|storeEvents|npcEvents|text|report|actionText|chat|setStatus|reqStatus|reqCharFlags|setCharFlags|description|name|ambientSound|specialBiomes|extends|reqLoyalty|loyalty|actions|playMusic|items|slots|reqDifficulty|reqItems|refs|ref|win|flee|loot|cance|close|reqAge|reqMaxPerWorld|alwaysShown|standing|events|combat|reqWorld|addCharacter|count|winEvents|failEvents|reqDice|sanity|reqLevel|optional|health|consume|reqBiomeFlags|reqCharacter|restoreCharacter|setPartyFlags|incAchievement|showPartyCount|reqLocationFlags|setLocationFlags|chance|zones|perlin|tile|flags|eventImg|tokenIdx|terrain|dist|group|debugCategory|tripEvents|important|sprite|title|storeCharacter|dropItems|barter|baseValue|cancel|base|lines|compassScore|reqTutorial|setPartyStatus|reqSanity|setPartyStatus|addLocation|prio|posTile|revealTiles|reqPartyStatus|unlockPocket|turns|reqPartyFlags|deactivateZones|reqHealth|reqItemsValue|teleport|reqPartyCount|showImage|gameOver|addZone|setTileFlags|src|type|showCampFire|reqTileFlags|reqGender|removeCharacter|reqFreePartyCount|unstoreCharacter|reqWorldFlags|funds|hidePartyOffer|npc|resetGlobalInv|removeStatusWithFlags|mapScore|spawnEvents|hideParty|setTile|particle|maxStack|useEvents|value|autoRemove|showHint|replaceLocations|fame|karma|reqStatusFlags|bonus|reqStatusDayAge|reqLocation|startSprawl|delayedEvent|reqStanding|isAbstract|setLocationFlags|reqLocationFlags|travelEvent|playSound|removeItem|noWeight|losable|metaItem|cloneCharacter|maxChargeTime|posPunch|dayEvents|reqCanStartSprawl|camShake|replaceTiles|isWeapon|maxDice|tempDice|reqTiles|resetStatusAge|buffDays|biomes|debugColor|viewCost|moveSounds|travelParticle|sprawls|sprites|moveCost|setNeighbors|reqZone|setLocationParticle|resetLocationAge|subLocations|isRemovable|keepReachable|hintBiome|hintCompass|keepReachable|extraFame|locations|goals|slotMarker|buffEndEvents|dowsing|itemEvents|setTempFlags|reqTempFlags|levels|alwaysUnlocked|characters|variations|miniSprite|endWorld|warpWorld|unlockCharacter|color|offsetX|offsetY|velX|velY|weight|scale|velScale|fadeStart|maxTime|isAbsolute|keys|time|imgSrc|timer|cameraZoom|timeJump|moveSpeed|borderImgIdx|size|moveSpeed|aggroChance|maxSeekTurns|addNPC|miniMap|removeZones|worldMap|reqKarma|superMove|hasStash|initItems|addButterfly|removeZone|canAttack|showOutline|eventChance|stopTravel|tileFlags|alwaysSeeking|reqRanking)[\\s,:}]",
+				"captures": {
+					"1": {"name": "keyword.control.tcescript"}
+				}
+			}]
+		},
+		"subKeywords": {
+			"patterns": [{
+				"match": "[\\s,:{](locationFlags|radius|centerCam|location|capacity|dice|maxRange|range|old|new|power|length|reachable|traversable|width|height|coverage|initEvents|showMounted|worldPower|setPos|particles|particlesChance|priceTable|hideNPCInv|gender|statuses|portrait|seeking)[\\s,:}]",
+				"captures": {
+					"1": {"name": "token.debug-token"}
+				}
+			}]
+		},
+		"entity": {
+			"patterns": [{
+				"name": "variable.language.tcescript",
+				"match": "(ex|tl|evt|loc|act|gol|grp|pck|bio|it|zn|cl|tg|tgl|il|spr|df|dp|pt|dc|buf|wd|cfg|na|np|ch|sp|anm|npc|pl|emy|st|pk|os|ach)-[\\w-]+"
+			}]
+		},
+		"constant": {
+			"patterns": [{
+				"match": "[\\s,:{](true|false|agility|stability|mind|any|female|all|male)[\\s,:}]",
+				"captures": {
+					"1": {"name": "constant.language.tcescript"}
+				}
+			}]
+		},
+		"strings": {
+			"name": "string.quoted.double.tcescript",
+			"begin": "\"",
+			"end": "\"",
+			"patterns": [
+				{
+					"name": "constant.character.escape.tcescript",
+					"match": "\\\\."
+				}
+			]
+		},
+		"locaStrings": {
+			"patterns": [{
+				"name": "meta.selector",
+				"match": "txt-[\\w-]+"
+			}]
+		},
+		"posFlag": {
+			"patterns": [{
+				"name": "beginning.punctuation.definition.quote.markdown",
+				"match": "(\\+[A-Za-z][A-Za-z_\\d-]+)"
+			}]
+		},
+		"negFlag": {
+			"patterns": [{
+				"name": "string.regexp",
+				"match": "(-[A-Za-z][A-Za-z_\\d-]+)"
+			}]
+		},
+		"range": {
+			"patterns": [{
+				"name": "constant.numeric.tcescript",
+				"match": "-?[\\d]*\\.\\.-?[\\d]*"
+			}]
+		},
+		"number": {
+			"patterns": [{
+				"name": "constant.numeric.tcescript",
+				"match": "[\\d]+\\.?[\\d]*"
+			}]
+		}
+	},
+	"scopeName": "source.tcescript"
+}
