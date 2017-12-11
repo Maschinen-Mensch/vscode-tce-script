@@ -53,7 +53,7 @@
 		"entity": {
 			"patterns": [{
 				"name": "variable.language.tcescript",
-				"match": "(ex|tl|evt|loc|act|gol|grp|pck|bio|it|zn|cl|tg|tgl|il|spr|df|dp|pt|dc|buf|wd|cfg|na|np|ch|sp|anm|npc|pl|emy|st|pk|os|ach)-[\\w-]+"
+				"match": "\\b(ex|tl|evt|loc|act|gol|grp|pck|bio|it|zn|cl|tg|tgl|il|spr|df|dp|pt|dc|buf|wd|cfg|na|np|ch|sp|anm|npc|pl|emy|st|pk|os|ach)-[\\w-]+"
 			}]
 		},
 		"constant": {
@@ -84,13 +84,13 @@
 		"posFlag": {
 			"patterns": [{
 				"name": "beginning.punctuation.definition.quote.markdown",
-				"match": "(\\+[A-Za-z][A-Za-z_\\d-]+)"
+				"match": "\\B(\\+[A-Za-z][A-Za-z_\\d-]+)"
 			}]
 		},
 		"negFlag": {
 			"patterns": [{
 				"name": "string.regexp",
-				"match": "(-[A-Za-z][A-Za-z_\\d-]+)"
+				"match": "\\B(-[A-Za-z][A-Za-z_\\d-]+)"
 			}]
 		},
 		"range": {
