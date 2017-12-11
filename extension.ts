@@ -23,15 +23,29 @@ import {
     Location,
     Uri,
     Position,
-    ProviderResult
+    ProviderResult,
+    DefinitionProvider,
+    Definition
 } from 'vscode';
 
 const TCE_MODE: DocumentFilter = { language: 'tcescript', scheme: 'file' };
 
-class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymbolProvider {
+class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymbolProvider, DefinitionProvider {
 
-    getSymbols(text: string, uri: Uri)
+    cached = {};
+
+    TCEDocumentSymbolProvider()
     {
+    }
+    
+    getSymbols(document: TextDocument, uri: Uri)
+    {
+        // if (cached[document.uri.path] != null)
+        // {
+        //     return cached[document.uri.path];
+        // }
+
+        let text = document.getText();
         let regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
 
         let lines = text.split('\n')
@@ -44,18 +58,19 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
                 symbols.push(new SymbolInformation(
                     match[1], 
                     SymbolKind.Key, 
-                    uri,
+                    uri.path,
                     new Location(uri, new Position(idx, match.index))
                 ))
             }
         });
 
+        // cached[document.uri.path] = symbols;
         return symbols;
     }
 
     public provideDocumentSymbols(document: TextDocument, token: CancellationToken): Thenable<SymbolInformation[]> {
         let text = document.getText();
-        return this.getSymbols(text, document.uri);
+        return this.getSymbols(document, document.uri);
     }
 
     public provideWorkspaceSymbols(query: string, token: CancellationToken): ProviderResult<SymbolInformation[]>
@@ -65,28 +80,31 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return workspace.findFiles('**/*.hjson').then(files => Promise.all(files.map(file => {
             let st = workspace.openTextDocument(file)
             return st.then((document) => {
-                let text = document.getText();
-                let newSymbols = this.getSymbols(text, document.uri)
-
+                let newSymbols = this.getSymbols(document, document.uri)
                 symbols = symbols.concat(newSymbols);
             });
         }))).then(() => symbols);
     }
+
+    public provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
+        let regex = new RegExp("\\s*([\\w-]+)")
+        let query : string = document.getText(document.getWordRangeAtPosition(position, regex)).trim();
+       
+        return this.provideWorkspaceSymbols(query, token).then(symbols => {
+            for (let symbol of symbols) {
+                if (symbol.name == query) {
+                    return symbol.location;
+                }
+            }
+        });
+    }
 }
 
-// this method is called when your extension is activated. activation is
-// controlled by the activation events defined in package.json
 export function activate(ctx: ExtensionContext) {
     console.log('Acvitated TCE Script Extension');
-    
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-
-    // create a new word counter
-    // add to a list of disposables which are disposed when this extension
-    // is deactivated again.
 
     let provider = new TCEDocumentSymbolProvider()
     ctx.subscriptions.push(languages.registerDocumentSymbolProvider(TCE_MODE, provider));
     ctx.subscriptions.push(languages.registerWorkspaceSymbolProvider(provider));
+    ctx.subscriptions.push(languages.registerDefinitionProvider(TCE_MODE, provider));
 }
