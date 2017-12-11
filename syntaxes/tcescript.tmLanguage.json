@@ -15,22 +15,27 @@
 			"include": "#strings"
 		},
 		{
-			"include": "#locaStrings"
+			"name": "meta.selector",
+			"match": "txt-[\\w-]+"
 		},
 		{
 			"include": "#entity"
 		},
 		{
-			"include": "#posFlag"
+			"name": "beginning.punctuation.definition.quote.markdown",
+			"match": "\\B(\\+[A-Za-z][A-Za-z_\\d-]+)"
 		},
 		{
-			"include": "#negFlag"
+			"name": "string.regexp",
+			"match": "\\B(-[A-Za-z][A-Za-z_\\d-]+)"
 		},
 		{
-			"include": "#range"
+			"name": "constant.numeric.tcescript",
+			"match": "-?[\\d]*\\.\\.-?[\\d]*"
 		},
 		{
-			"include": "#number"
+			"name": "constant.numeric.tcescript",
+			"match": "[\\d]+\\.?[\\d]*"
 		}
 	],
 	"repository": {
@@ -74,37 +79,7 @@
 					"match": "\\\\."
 				}
 			]
-		},
-		"locaStrings": {
-			"patterns": [{
-				"name": "meta.selector",
-				"match": "txt-[\\w-]+"
-			}]
-		},
-		"posFlag": {
-			"patterns": [{
-				"name": "beginning.punctuation.definition.quote.markdown",
-				"match": "\\B(\\+[A-Za-z][A-Za-z_\\d-]+)"
-			}]
-		},
-		"negFlag": {
-			"patterns": [{
-				"name": "string.regexp",
-				"match": "\\B(-[A-Za-z][A-Za-z_\\d-]+)"
-			}]
-		},
-		"range": {
-			"patterns": [{
-				"name": "constant.numeric.tcescript",
-				"match": "-?[\\d]*\\.\\.-?[\\d]*"
-			}]
-		},
-		"number": {
-			"patterns": [{
-				"name": "constant.numeric.tcescript",
-				"match": "[\\d]+\\.?[\\d]*"
-			}]
-		}
+		}		
 	},
 	"scopeName": "source.tcescript"
 }
