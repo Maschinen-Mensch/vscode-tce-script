@@ -44,15 +44,12 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         let prefix = ""
         let regex = null
         
-        console.info("(((("+uri.path)
-        
         if (uri.path.endsWith("hjson")) {
             regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
-            console.info("CHECKING HJSON")
+            
         } else if (uri.path.endsWith("csv")) {
             regex = new RegExp("\"(.+)\",")
             prefix = "txt-"
-            console.info("CHECKING CSV")
         }
 
         if (regex == null)
