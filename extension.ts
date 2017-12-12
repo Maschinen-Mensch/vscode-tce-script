@@ -39,14 +39,14 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
     {
     }
     
-    getSymbols(document: TextDocument, uri: Uri)
+    getSymbols(document: TextDocument, uri: Uri) : SymbolInformation[]
     {
         let prefix = ""
         let regex = null
         
         if (uri.path.endsWith("hjson")) {
             regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
-            
+
         } else if (uri.path.endsWith("csv")) {
             regex = new RegExp("\"(.+)\",")
             prefix = "txt-"
@@ -76,11 +76,11 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return symbols;
     }
 
-    public provideDocumentSymbols(document: TextDocument, token: CancellationToken): Thenable<SymbolInformation[]> {
+    public provideDocumentSymbols(document: TextDocument, token: CancellationToken): SymbolInformation[] {
         return this.getSymbols(document, document.uri);
     }
 
-    public provideWorkspaceSymbols(query: string, token: CancellationToken): ProviderResult<SymbolInformation[]>
+    public provideWorkspaceSymbols(query: string, token: CancellationToken): Thenable<SymbolInformation[]>
     {
         let symbols = []
 
