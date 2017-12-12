@@ -16,7 +16,8 @@
     },
     "main": "./out/extension",
     "activationEvents": [
-		"onLanguage:tcescript"
+		"onLanguage:tcescript",
+		"onLanguage:plaintext"
 	],
     "contributes": {
         "languages": [{

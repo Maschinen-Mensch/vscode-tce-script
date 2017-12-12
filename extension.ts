@@ -29,6 +29,7 @@ import {
 } from 'vscode';
 
 const TCE_MODE: DocumentFilter = { language: 'tcescript', scheme: 'file' };
+const LANG_MODE: DocumentFilter = { language: 'plaintext', scheme: 'file' };
 
 class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymbolProvider, DefinitionProvider {
 
@@ -40,14 +41,24 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
     
     getSymbols(document: TextDocument, uri: Uri)
     {
-        // if (cached[document.uri.path] != null)
-        // {
-        //     return cached[document.uri.path];
-        // }
+        let prefix = ""
+        let regex = null
+        
+        console.info("(((("+uri.path)
+        
+        if (uri.path.endsWith("hjson")) {
+            regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
+            console.info("CHECKING HJSON")
+        } else if (uri.path.endsWith("csv")) {
+            regex = new RegExp("\"(.+)\",")
+            prefix = "txt-"
+            console.info("CHECKING CSV")
+        }
+
+        if (regex == null)
+            return null;
 
         let text = document.getText();
-        let regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
-
         let lines = text.split('\n')
         let symbols = []
 
@@ -56,7 +67,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
 
             if (match != null) {
                 symbols.push(new SymbolInformation(
-                    match[1], 
+                    prefix + match[1], 
                     SymbolKind.Key, 
                     uri.path,
                     new Location(uri, new Position(idx, match.index))
@@ -69,7 +80,6 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
     }
 
     public provideDocumentSymbols(document: TextDocument, token: CancellationToken): Thenable<SymbolInformation[]> {
-        let text = document.getText();
         return this.getSymbols(document, document.uri);
     }
 
@@ -83,6 +93,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
                 let newSymbols = this.getSymbols(document, document.uri)
                 symbols = symbols.concat(newSymbols);
             });
+
         }))).then(() => symbols);
     }
 
@@ -105,6 +116,10 @@ export function activate(ctx: ExtensionContext) {
 
     let provider = new TCEDocumentSymbolProvider()
     ctx.subscriptions.push(languages.registerDocumentSymbolProvider(TCE_MODE, provider));
+    ctx.subscriptions.push(languages.registerDocumentSymbolProvider(LANG_MODE, provider));
+
     ctx.subscriptions.push(languages.registerWorkspaceSymbolProvider(provider));
+
     ctx.subscriptions.push(languages.registerDefinitionProvider(TCE_MODE, provider));
+    ctx.subscriptions.push(languages.registerDefinitionProvider(LANG_MODE, provider));
 }
