@@ -22,7 +22,7 @@
 			"include": "#entity"
 		},
 		{
-			"name": "beginning.punctuation.definition.quote.markdown",
+			"name": "keyword.other.unit",
 			"match": "\\B(\\+[A-Za-z][A-Za-z_\\d-]+)"
 		},
 		{
@@ -35,11 +35,11 @@
 		},
 		{
 			"name": "constant.numeric.tcescript",
-			"match": "[\\d]+\\.?[\\d]*"
+			"match": "\\b[\\d]+\\.?[\\d]*\\b"
 		},
 		{
 			"name": "punctuation.definition.tag",
-			"match": "[\\w-]*\\.?\\w+\\.png"
+			"match": "(\\b[\\w-]*/?)*[\\w-]*\\.?\\w+\\.png\\b"
 		},
 		{
 			"name": "comment",
