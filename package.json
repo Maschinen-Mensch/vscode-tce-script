@@ -1,8 +1,8 @@
 {
     "name": "vscode-tce-script",
-    "displayName": "TCE script",
-    "description": "The Curious Expedition script support",
-    "version": "0.0.1",
+    "displayName": "TCE Script",
+    "description": "Official Curious Expedition scripting support",
+    "version": "0.2.0",
     "publisher": "Maschinen-Mensch",
     "engines": {
         "vscode": "^1.16.0"
@@ -16,23 +16,32 @@
     },
     "main": "./out/extension",
     "activationEvents": [
-		"onLanguage:tcescript",
-		"onLanguage:plaintext"
-	],
+        "onLanguage:tcescript",
+        "onLanguage:plaintext"
+    ],
     "contributes": {
-        "languages": [{
-            "id": "tcescript",  
-            "aliases": ["TCE Script", "tcescript"],
-            "extensions": [".hjson"],
-            "configuration": "./language-configuration.json"
-        }],
-        "grammars": [{
-            "language": "tcescript",
-            "scopeName": "source.tcescript",
-            "path": "./syntaxes/tcescript.tmLanguage.json"
-        }],
-        "documentSymbolProvider" : "true",
-        "workspaceSymbolProvider" : "true"
+        "languages": [
+            {
+                "id": "tcescript",
+                "aliases": [
+                    "TCE Script",
+                    "tcescript"
+                ],
+                "extensions": [
+                    ".hjson"
+                ],
+                "configuration": "./language-configuration.json"
+            }
+        ],
+        "grammars": [
+            {
+                "language": "tcescript",
+                "scopeName": "source.tcescript",
+                "path": "./syntaxes/tcescript.tmLanguage.json"
+            }
+        ],
+        "documentSymbolProvider": "true",
+        "workspaceSymbolProvider": "true"
     },
     "scripts": {
         "vscode:prepublish": "tsc -p ./",
@@ -43,5 +52,5 @@
     "devDependencies": {
         "typescript": "^2.0.3",
         "vscode": "^1.1.9"
-   }
+    }
 }
