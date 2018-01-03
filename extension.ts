@@ -25,22 +25,25 @@ import {
     Position,
     ProviderResult,
     DefinitionProvider,
-    Definition
+    Definition,
+    TextEditor,
+    TextEditorEdit,
 } from 'vscode';
+
+import { copy } from 'copy-paste';
+import * as path from 'path';
+
 
 const TCE_MODE: DocumentFilter = { language: 'tcescript', scheme: 'file' };
 const LANG_MODE: DocumentFilter = { language: 'plaintext', scheme: 'file' };
 
 class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymbolProvider, DefinitionProvider {
-
     cached = {};
 
-    TCEDocumentSymbolProvider()
-    {
+    TCEDocumentSymbolProvider() {
     }
     
-    getSymbols(document: TextDocument, uri: Uri) : SymbolInformation[]
-    {
+    getSymbols(document: TextDocument, uri: Uri) : SymbolInformation[] {
         let prefix = ""
         let regex = null
         
@@ -80,8 +83,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return this.getSymbols(document, document.uri);
     }
 
-    public provideWorkspaceSymbols(query: string, token: CancellationToken): Thenable<SymbolInformation[]>
-    {
+    public provideWorkspaceSymbols(query: string, token: CancellationToken): Thenable<SymbolInformation[]> {
         let symbols = []
 
         return workspace.findFiles('**/*.hjson').then(files => Promise.all(files.map(file => {
@@ -119,4 +121,11 @@ export function activate(ctx: ExtensionContext) {
 
     ctx.subscriptions.push(languages.registerDefinitionProvider(TCE_MODE, provider));
     ctx.subscriptions.push(languages.registerDefinitionProvider(LANG_MODE, provider));
+
+    vscode.commands.registerTextEditorCommand("tcescript.githubLink", (editor: TextEditor, edit: TextEditorEdit) => {
+        let line = editor.selections[0].start.line;
+        let file = path.basename(editor.document.uri.fsPath);
+        let link = "https://github.com/Maschinen-Mensch/curiousexpedition/blob/fecda4d18b041c4735f0dfdc37ef09f79b81f8fc/conf/"+file+"#L"+line;
+        copy(link);
+    });
 }

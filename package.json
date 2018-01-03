@@ -2,7 +2,7 @@
     "name": "vscode-tce-script",
     "displayName": "TCE Script",
     "description": "Official Curious Expedition scripting support",
-    "version": "0.2.0",
+    "version": "0.3.0",
     "publisher": "Maschinen-Mensch",
     "engines": {
         "vscode": "^1.16.0"
@@ -12,7 +12,8 @@
     ],
     "dependencies": {
         "hjson": "^2.4.2",
-        "@types/node": "^8.0.0"
+        "@types/node": "^8.0.0",
+        "copy-paste": "^1.3.0"
     },
     "main": "./out/extension",
     "activationEvents": [
@@ -40,6 +41,19 @@
                 "path": "./syntaxes/tcescript.tmLanguage.json"
             }
         ],
+        "commands": [
+            {
+                "command": "tcescript.githubLink",
+                "title": "Copy Github Link for Current Line"
+            }
+        ],
+        "menus": {
+            "editor/context": [{
+                "command": "tcescript.githubLink",
+                "title": "Permalink to Github",
+                "category": "TCE Script"
+            }]
+        },
         "documentSymbolProvider": "true",
         "workspaceSymbolProvider": "true"
     },
