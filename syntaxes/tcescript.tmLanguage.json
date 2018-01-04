@@ -39,7 +39,7 @@
 		},
 		{
 			"name": "punctuation.definition.tag",
-			"match": "(\\b[\\w-]*/?)*[\\w-]*\\.?\\w+\\.png\\b"
+			"match": "[\\w\\/]+\\.png\\b"
 		},
 		{
 			"name": "comment",
