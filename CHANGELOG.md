@@ -1,7 +1,7 @@
 # Change Log
 
 ## [0.4.0]
-- Add more keywords to syntax highlighting
+- Add more keywords to syntax highlighting for game version 1.3.10
 
 ## [0.3.1]
 - Fixed parsing error in grammar
