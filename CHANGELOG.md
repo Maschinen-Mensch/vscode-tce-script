@@ -1,7 +1,8 @@
 # Change Log
 
-## [0.4.0]
+## [0.4.1]
 - Add more keywords to syntax highlighting for game version 1.3.10
+- Added icon
 
 ## [0.3.1]
 - Fixed parsing error in grammar
