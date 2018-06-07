@@ -48,11 +48,13 @@
             }
         ],
         "menus": {
-            "editor/context": [{
-                "command": "tcescript.githubLink",
-                "title": "Permalink to Github",
-                "category": "TCE Script"
-            }]
+            "editor/context": [
+                {
+                    "command": "tcescript.githubLink",
+                    "title": "Permalink to Github",
+                    "category": "TCE Script"
+                }
+            ]
         },
         "documentSymbolProvider": "true",
         "workspaceSymbolProvider": "true"
