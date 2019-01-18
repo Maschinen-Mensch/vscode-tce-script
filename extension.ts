@@ -47,7 +47,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         let prefix = ""
         let regex = null
         
-        if (uri.path.endsWith("json")) {
+        if (uri.path.endsWith("hjson") || uri.path.endsWith("json")) {
             regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
 
         } else if (uri.path.endsWith("csv")) {
@@ -86,14 +86,30 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
     public provideWorkspaceSymbols(query: string, token: CancellationToken): Thenable<SymbolInformation[]> {
         let symbols = []
 
-        return workspace.findFiles('**/*.hjson').then(files => Promise.all(files.map(file => {
-            let st = workspace.openTextDocument(file)
-            return st.then((document) => {
-                let newSymbols = this.getSymbols(document, document.uri)
-                symbols = symbols.concat(newSymbols);
-            });
+        let processSymbolsFromFiles = (files) =>
+        {
+            return files.map(file => {
+                let st = workspace.openTextDocument(file)
+                return st.then((document) => {
+                    let newSymbols = this.getSymbols(document, document.uri)
+                    symbols = symbols.concat(newSymbols);
+                });
+    
+            }).then(() => symbols);
+        };
 
-        }))).then(() => symbols);
+        return workspace.findFiles('**/*.hjson').then(files => {
+            if (files.length == 0)
+            {
+                workspace.findFiles('**/*.json').then(files => {
+                    return processSymbolsFromFiles(files);
+                });
+            }
+            else
+            {
+                return processSymbolsFromFiles(files);
+            }
+        });
     }
 
     public provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
