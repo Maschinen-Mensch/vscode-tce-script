@@ -83,33 +83,33 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return this.getSymbols(document, document.uri);
     }
 
-    public provideWorkspaceSymbols(query: string, token: CancellationToken): Thenable<SymbolInformation[]> {
-        let symbols = []
+    public async provideWorkspaceSymbols(query: string, token: CancellationToken): Promise<SymbolInformation[]> {
 
         let processSymbolsFromFiles = (files) =>
-        {
-            return files.map(file => {
-                let st = workspace.openTextDocument(file)
-                return st.then((document) => {
+        {        
+            let symbols = []
+    
+            let parsePromises = files.map(file => {
+                return workspace.openTextDocument(file).then((document) => {
                     let newSymbols = this.getSymbols(document, document.uri)
                     symbols = symbols.concat(newSymbols);
                 });
-    
-            }).then(() => symbols);
+            });
+
+            return Promise.all(parsePromises).then(() => {
+                 return symbols;
+            });
         };
 
-        return workspace.findFiles('**/*.hjson').then(files => {
-            if (files.length == 0)
-            {
-                workspace.findFiles('**/*.json').then(files => {
-                    return processSymbolsFromFiles(files);
-                });
-            }
-            else
-            {
-                return processSymbolsFromFiles(files);
-            }
-        });
+        let hjsonFiles = await workspace.findFiles('**/*.hjson');
+
+        if (hjsonFiles.length == 0)
+        {
+            hjsonFiles = await workspace.findFiles('**/*.json');
+        }
+
+        let symbols = await processSymbolsFromFiles(hjsonFiles);
+        return symbols;
     }
 
     public provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
