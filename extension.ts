@@ -108,7 +108,11 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
             hjsonFiles = await workspace.findFiles('**/*.json');
         }
 
-        let symbols = await processSymbolsFromFiles(hjsonFiles);
+        let csvFiles = await workspace.findFiles('**/*.csv');
+
+        let allFiles = hjsonFiles.concat(csvFiles);
+
+        let symbols = await processSymbolsFromFiles(allFiles);
         return symbols;
     }
 
