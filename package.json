@@ -34,7 +34,8 @@
                     "tcescript"
                 ],
                 "extensions": [
-                    ".hjson"
+                    ".hjson",
+                    ".hjson.txt"
                 ],
                 "configuration": "./language-configuration.json"
             }

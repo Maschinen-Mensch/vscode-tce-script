@@ -47,7 +47,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         let prefix = ""
         let regex = null
         
-        if (uri.path.endsWith("hjson") || uri.path.endsWith("json")) {
+        if (uri.path.endsWith("hjson") || uri.path.endsWith("hjson.txt")) {
             regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
 
         } else if (uri.path.endsWith("csv")) {
@@ -105,7 +105,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
 
         if (hjsonFiles.length == 0)
         {
-            hjsonFiles = await workspace.findFiles('**/*.json');
+            hjsonFiles = await workspace.findFiles('**/*.hjson.txt');
         }
 
         let csvFiles = await workspace.findFiles('**/*.csv');
