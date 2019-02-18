@@ -2,7 +2,7 @@
     "name": "vscode-tce-script",
     "displayName": "TCE Script",
     "description": "Official Curious Expedition scripting support",
-    "version": "0.4.7",
+    "version": "0.4.8",
     "publisher": "Maschinen-Mensch",
     "repository": {
         "type": "git",
