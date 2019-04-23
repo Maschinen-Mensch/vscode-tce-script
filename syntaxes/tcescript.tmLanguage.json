@@ -66,7 +66,7 @@
 		"entity": {
 			"patterns": [{
 				"name": "variable.language.tcescript",
-				"match": "\\b(ex|tl|evt|loc|act|gol|grp|pck|bio|it|zn|cl|tg|tgl|il|spr|df|dp|pt|dc|buf|wd|cfg|na|np|ch|sp|anm|npc|pl|emy|st|pk|os|ach|pck|txt|trn)-[\\w-]+"
+				"match": "\\b(ex|tl|evt|loc|act|gol|grp|pck|bio|it|zn|cl|tg|tgl|il|spr|df|dp|pt|dc|buf|wd|cfg|na|np|ch|sp|anm|npc|pl|emy|st|pk|os|ach|pck|txt|trn|smp)-[\\w-]+"
 			}]
 		},
 		"constant": {
