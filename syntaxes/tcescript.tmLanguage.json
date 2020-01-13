@@ -57,7 +57,7 @@
 		},
 		"subKeywords": {
 			"patterns": [{
-				"match": "[\\s,:{](actions|select|charEvents|buffEndEvents|dayEvents|events|failEvents|fleeEvents|itemEvents|npcEvents|partyEvents|spawnEvents|storeEvents|useEvents|tripEvents|winEvents|initEvents|closeEvents|cancelEvents|barter|loot|escape|capture|done|comboSelect|buffEndEvents|revealEvents|selectEvents|levels|enterEvents|sprawlEvents|selectionEvents|showUnlocks|expeditionSelect|refreshEvents|showUnlocks|triumph|showCamp|clubConfirm|showUpgrade|capture)[\\s,:}]",
+				"match": "[\\s,:{](actions|select|charEvents|buffEndEvents|dayEvents|events|failEvents|fleeEvents|itemEvents|npcEvents|partyEvents|spawnEvents|storeEvents|useEvents|tripEvents|winEvents|initEvents|closeEvents|cancelEvents|barter|loot|escape|capture|done|comboSelect|buffEndEvents|revealEvents|selectEvents|levels|enterEvents|sprawlEvents|selectionEvents|showUnlocks|expeditionSelect|refreshEvents|showUnlocks|triumph|showCamp|clubConfirm|showUpgrade|capture|idlingEvents)[\\s,:}]",
 				"captures": {
 					"1": {"name": "token.debug-token"}
 				}
