@@ -73,6 +73,6 @@
     },
     "devDependencies": {
         "typescript": "^2.0.3",
-        "vscode": "^1.1.9"
+        "vscode": "^1.1.37"
     }
 }
