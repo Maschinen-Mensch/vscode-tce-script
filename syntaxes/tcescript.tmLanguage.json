@@ -71,7 +71,7 @@
 		},
 		"constant": {
 			"patterns": [{
-				"match": "[\\s,:{](true|false|agility|stability|mind|any|female|all|male|additive|max|down|s|se|sw|n|nw|ne|none|party|explorer|archive|inherit|event|angry|nervous|left|right|auto|eloquence|finesse|intellect|vigor|awareness|remaining|friendly|american|british|chinese|closest|random|furthest|none|party|npc|archive|event|explorer|inherit|statusPrimary|statusSecondary|statusBoth|shipShop|tavern|reward|day|night|interior|dawn|dusk|statusOther|generic|trophyHunter|anthropologist|tombRaider|cartographer|cultLeader|campaign|ascension|edge|center|biomeCenter)[\\s,:}]",
+				"match": "[\\s,:{](true|false|agility|stability|mind|any|female|all|male|additive|max|down|s|se|sw|n|nw|ne|none|party|explorer|archive|inherit|event|angry|nervous|left|right|auto|eloquence|finesse|intellect|vigor|awareness|remaining|friendly|american|british|chinese|closest|random|furthest|none|party|npc|archive|event|explorer|inherit|statusPrimary|statusSecondary|statusBoth|shipShop|tavern|reward|day|night|interior|dawn|dusk|statusOther|generic|trophyHunter|anthropologist|tombRaider|cartographer|cultLeader|campaign|ascension|edge|center|biomeCenter|single|loop|shuffle|loopAll|selectAndPlayOnce|selectAndLoop)[\\s,:}]",
 				"captures": {
 					"1": {"name": "constant.language.tcescript"}
 				}
