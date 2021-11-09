@@ -38,7 +38,6 @@ const TCE_MODE: DocumentFilter = { language: 'tcescript', scheme: 'file' };
 const LANG_MODE: DocumentFilter = { language: 'plaintext', scheme: 'file' };
 
 class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymbolProvider, DefinitionProvider {
-    cached = {};
 
     TCEDocumentSymbolProvider() {
     }
@@ -75,7 +74,6 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
             }
         });
 
-        // cached[document.uri.path] = symbols;
         return symbols;
     }
 
@@ -83,7 +81,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return this.getSymbols(document, document.uri);
     }
 
-    public async provideWorkspaceSymbols(query: string, token: CancellationToken): Promise<SymbolInformation[]> {
+    public async getAllWorkspaceSymbols(): Promise<SymbolInformation[]> {
 
         let hjsonFiles = await workspace.findFiles('**/*.hjson');
         hjsonFiles = hjsonFiles.concat(await workspace.findFiles('**/*.hjson.txt'));
@@ -102,17 +100,100 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
         return symbols;
     }
 
-    public provideDefinition(document: TextDocument, position: Position, token: CancellationToken): ProviderResult<Definition> {
-        let regex = new RegExp("\\s*([\\w-]+)")
-        let query : string = document.getText(document.getWordRangeAtPosition(position, regex)).trim();
-       
-        return this.provideWorkspaceSymbols(query, token).then(symbols => {
-            for (let symbol of symbols) {
-                if (symbol.name == query) {
-                    return symbol.location;
+    public async provideWorkspaceSymbols(query: string, token: CancellationToken): Promise<SymbolInformation[]> {
+        return this.getAllWorkspaceSymbols();
+    }
+
+    cachedSymbols = {};
+
+    async cacheWorkspaceSymbols()
+    {
+        let symbols = await this.getAllWorkspaceSymbols();
+        this.cachedSymbols = {};
+        for (let symbol of symbols)
+        {
+            this.cachedSymbols[symbol.name] = symbol;
+        }
+    }
+
+    getPositionForSymbol(document: TextDocument, symbolID : string) : Position {
+        let prefix = ""
+        let regex = null
+        let uri = document.uri;
+        
+        if (uri.path.endsWith("hjson") || uri.path.endsWith("hjson.txt")) {
+            regex = new RegExp("\\bid\\s*:\\s*([\\w-]+)")
+
+        } else if (uri.path.endsWith("csv")) {
+            regex = new RegExp("\"(.+)\",")
+            prefix = "txt-"
+        }
+
+        if (regex == null)
+            return null;
+
+        let text = document.getText();
+        let lines = text.split('\n')
+
+        let idx = 0;
+        for (const line of lines)
+        {
+            let match = regex.exec(line)
+
+            if (match != null) {
+                let thisID = prefix + match[1]
+                if (thisID == symbolID)
+                {
+                    return new Position(idx, match.index);
                 }
             }
-        });
+            idx++;
+        }
+
+        return null;
+    }
+
+    public async provideDefinition(document: TextDocument, position: Position, token: CancellationToken): Promise<Definition> {
+        let regex = new RegExp("\\s*([\\w-]+)")
+        let query : string = document.getText(document.getWordRangeAtPosition(position, regex)).trim();
+
+        let cachedResult : SymbolInformation = this.cachedSymbols[query];
+        if (cachedResult != null)
+        {
+            // check if the cached result it still valid            
+            let document = await workspace.openTextDocument(cachedResult.containerName);
+            let currPosition = this.getPositionForSymbol(document, query);
+            if (currPosition != null && currPosition.line != cachedResult.location.range.start.line)
+            {
+                // no longer valid - but as its still in this file, just update the cached symbol
+                cachedResult = new SymbolInformation(
+                    query,
+                    SymbolKind.Key, 
+                    document.uri.path,
+                    new Location(document.uri, currPosition));
+                this.cachedSymbols[query] = cachedResult;                
+            }
+            else if (currPosition == null)
+            {
+                // it's not: just re-cache everything
+                cachedResult = null;
+            }
+        }
+
+        if (cachedResult == null)
+        {
+            await this.cacheWorkspaceSymbols();
+            cachedResult = this.cachedSymbols[query];
+        }
+
+        if (cachedResult != null)
+        {
+            return cachedResult.location;   
+        }
+        else
+        {
+            return null;
+        }
     }
 }
 
