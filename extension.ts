@@ -85,34 +85,20 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
 
     public async provideWorkspaceSymbols(query: string, token: CancellationToken): Promise<SymbolInformation[]> {
 
-        let processSymbolsFromFiles = (files) =>
-        {        
-            let symbols = []
-    
-            let parsePromises = files.map(file => {
-                return workspace.openTextDocument(file).then((document) => {
-                    let newSymbols = this.getSymbols(document, document.uri)
-                    symbols = symbols.concat(newSymbols);
-                });
-            });
-
-            return Promise.all(parsePromises).then(() => {
-                 return symbols;
-            });
-        };
-
         let hjsonFiles = await workspace.findFiles('**/*.hjson');
-
-        if (hjsonFiles.length == 0)
-        {
-            hjsonFiles = await workspace.findFiles('**/*.hjson.txt');
-        }
+        hjsonFiles = hjsonFiles.concat(await workspace.findFiles('**/*.hjson.txt'));
 
         let csvFiles = await workspace.findFiles('**/*.csv');
 
         let allFiles = hjsonFiles.concat(csvFiles);
 
-        let symbols = await processSymbolsFromFiles(allFiles);
+        let symbols = []
+        for (let file of allFiles) {
+            let document = await workspace.openTextDocument(file);
+            let newSymbols = this.getSymbols(document, document.uri)
+            symbols = symbols.concat(newSymbols);
+        }
+
         return symbols;
     }
 
@@ -131,7 +117,7 @@ class TCEDocumentSymbolProvider implements DocumentSymbolProvider, WorkspaceSymb
 }
 
 export function activate(ctx: ExtensionContext) {
-    console.log('Acvitated TCE Script Extension');
+    console.log('Activated TCE Script Extension');
 
     let provider = new TCEDocumentSymbolProvider()
     ctx.subscriptions.push(languages.registerDocumentSymbolProvider(TCE_MODE, provider));
